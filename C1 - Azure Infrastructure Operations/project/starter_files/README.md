@@ -31,6 +31,9 @@ az policy assignment create --name "tagging-policy" --display-name "Ensure all i
 
 # Optional for testing: create a virtual machine without tags and see how it fails with error code RequestDisallowedByPolicy
 az vm create --resource-group udacity-cli-rg --name udacity-cli-vm --image UbuntuLTS --generate-ssh-keys --output json --verbose --admin-username udacity
+
+# Optional for testing: create a virtual machine with tags and see how creation of virtual machine succeeds
+az vm create --resource-group udacity-cli-rg --name udacity-cli-vm --image UbuntuLTS --generate-ssh-keys --output json --verbose --admin-username udacity --tags udacity=project
 ```
 #### Step 2: Packer Template
 ### Output

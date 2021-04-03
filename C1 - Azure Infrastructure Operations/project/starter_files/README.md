@@ -17,18 +17,20 @@ For this project, you will write a Packer template and a Terraform template to d
 4. Install [Terraform](https://www.terraform.io/downloads.html)
 
 ### Instructions
-1. Apply Azure policies to enforce that tags are applied to resources (if they support tagging)
-Azure offers managed policies for tag compliance: [Assign policies for tag compliance](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/tag-policies)
-In order to ensure that all indexed resources in the subscription have tags and deployment is denied if they do not, the following two policies are applied on Azure CLI:
+1. Enforce resource tagging by applying a custom policy for tagging to enforce that tags are applied to resources with resource types that support tags and locations
+The mode of the policy is set to "indexed" which evaluates only resource types that support tags and locations. In order to ensure that all indexed resources in the subscription have tags and deployment is denied if they do not, the following Policy Definition and Policy Assignment are applied in Azure CLI:
 ```
-az provider register --namespace 'Microsoft.PolicyInsights'
+# Create the Policy Definition (Subscription scope) 
+az policy definition create --name "RequireTagsOnIndexedResources" --display-name "Ensure all indexed resources are tagged" --description "Policy that ensures all indexed resources in the subscription have tags and deny deployment if they do not." --rules RequireTagsOnIndexedResources.Rules.json --mode indexed
+ 
+# Create the Policy Assignment 
+# Set the scope to a subscription
+az policy assignment create --name "tagging-policy" --display-name "Ensure all indexed resources are tagged Assignment" --scope /subscriptions/{SUBSCRIPTION ID} --policy /subscriptions/{SUBSCRIPTION ID}/providers/Microsoft.Authorization/policyDefinitions/RequireTagsOnIndexedResources
 
-az policy assignment create --name 'Enforce tagging of indexed resources' --display-name 'Policy ensures that only indexed resources with applied tags are deployed' --policy /providers/Microsoft.Authorization/policyDefinitions/871b6d14-10aa-478d-b590-94f262ecfa99
-
-
-https://github.com/Azure/azure-policy/blob/master/built-in-policies/policyDefinitions/Tags/RequireTag_Deny.json
+# Optional for testing: create a virtual machine without tags and see how it fails with error code RequestDisallowedByPolicy
+az vm create --resource-group udacity-cli-rg --name udacity-cli-vm --image UbuntuLTS --generate-ssh-keys --output json --verbose --admin-username udacity
 ```
-
+2. Packer Template
 ### Output
 **Your words here**
 

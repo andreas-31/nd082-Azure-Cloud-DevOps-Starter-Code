@@ -4,8 +4,8 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "main" {
-  name     = "${var.resource_group_name}"
-  #name     = "${var.prefix}-resources"
+  #name     = "${var.resource_group_name}"
+  name     = "${var.prefix}-resources"
   location = var.location
 }
 
@@ -134,7 +134,8 @@ resource "azurerm_network_interface_backend_address_pool_association" "example" 
 
 data "azurerm_image" "custom" {
     name = "UdacityWebServerPackerImage"
-    resource_group_name = azurerm_resource_group.main.name
+    #resource_group_name = azurerm_resource_group.main.name
+    resource_group_name = "${var.resource_group_name}"
 }
 
 resource "azurerm_virtual_machine" "main" {

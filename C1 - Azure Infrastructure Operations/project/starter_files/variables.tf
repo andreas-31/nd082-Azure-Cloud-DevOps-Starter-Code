@@ -19,11 +19,16 @@ variable "packer_image_name" {
 }
 
 variable "application_port" {
-    description = "The port that you want to expose to the external load balancer"
-    default     = 80
+  description = "The port that you want to expose to the external load balancer"
+  default     = 80
+}
+
+variable "admin_user" {
+  description = "Default username for admin user"
+  default     = "adminuser"
 }
 
 variable "admin_password" {
-    description = "Default password for adminuser"
-    default = "P@ssw0rd1234!"
+  description = "Default password for adminuser"
+  default     = "P@ssw0rd1234!"
 }

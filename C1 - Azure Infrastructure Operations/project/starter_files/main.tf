@@ -158,9 +158,9 @@ resource "azurerm_linux_virtual_machine" "main" {
   name                            = "${var.prefix}-vm${count.index}"
   resource_group_name             = azurerm_resource_group.main.name
   location                        = azurerm_resource_group.main.location
-  size                            = "Standard_F2"
-  admin_username                  = "adminuser"
-  admin_password                  = "P@ssw0rd1234!"
+  size                            = "Standard_B1s"
+  admin_username                  = "${var.admin_user}"
+  admin_password                  = "${var.admin_password}"
   availability_set_id             = azurerm_availability_set.avset.id
   disable_password_authentication = false
   network_interface_ids = [

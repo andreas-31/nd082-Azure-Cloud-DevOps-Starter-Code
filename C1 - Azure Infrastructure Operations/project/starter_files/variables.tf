@@ -13,12 +13,17 @@ variable "resource_group_name" {
   default     = "udacity-cli-rg"
 }
 
+variable "packer_image_name" {
+  description = "The name of the Packer image to be used for the virtual machines running the web app"
+  default     = "UdacityWebServerPackerImage"
+}
+
 variable "application_port" {
     description = "The port that you want to expose to the external load balancer"
     default     = 80
 }
 
 variable "admin_password" {
-    description = "Default password for admin"
+    description = "Default password for adminuser"
     default = "Passwwoord11223344"
 }

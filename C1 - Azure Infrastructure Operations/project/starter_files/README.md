@@ -36,6 +36,17 @@ az vm create --resource-group udacity-cli-rg --name udacity-cli-vm --image Ubunt
 az vm create --resource-group udacity-cli-rg --name udacity-cli-vm --image UbuntuLTS --generate-ssh-keys --output json --verbose --admin-username udacity --tags udacity=project
 ```
 #### Step 2: Packer Template
+The image for the virtual machine with included web server and web app are built with Packer.
+```bash
+# Packer command to create image for virtual machine in Azure
+packer build -var 'client_id={CLIENT ID}' -var 'client_secret={CLIENT SECRET}' -var 'subscription_id={SUBSCRIPTION ID}' server.json
+```
+In order to authenticate to your subscription replace the following values with those applicable to your subscription and service principal:
+1. {CLIENT ID}
+2. {CLIENT SECRET}
+3. {SUBSCRIPTION ID}
+
+#### Step 3: Terraform Template
 ### Output
 **Your words here**
 

@@ -25,5 +25,5 @@ variable "application_port" {
 
 variable "admin_password" {
     description = "Default password for adminuser"
-    default = "Passwwoord11223344"
+    default = "P@ssw0rd1234!"
 }

@@ -151,9 +151,15 @@ resource "azurerm_linux_virtual_machine" "main" {
     azurerm_network_interface.main[count.index].id,
   ]
   
-  storage_profile_image_reference {
-    #id=data.azurerm_image.image.id
+  storage_image_reference {
     id="${data.azurerm_image.custom.id}"
+  }
+  
+  storage_os_disk {
+    name              = "osdisk"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
   }
 #  source_image_reference {
 #    publisher = "Canonical"
@@ -162,10 +168,10 @@ resource "azurerm_linux_virtual_machine" "main" {
 #    version   = "latest"
 #  }
 
-  os_disk {
-    storage_account_type = "Standard_LRS"
-    caching              = "ReadWrite"
-  }
+#  os_disk {
+#    storage_account_type = "Standard_LRS"
+#    caching              = "ReadWrite"
+#  }
   
   tags = {
     udacity = "Project Web Server"

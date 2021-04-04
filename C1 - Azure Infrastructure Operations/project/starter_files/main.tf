@@ -133,3 +133,19 @@ resource "azurerm_linux_virtual_machine" "main" {
     caching              = "ReadWrite"
   }
 }
+
+# Reference: https://stackoverflow.com/questions/55033018/terraform-azure-create-a-linux-vm-from-packer-image-and-external-data-disk
+#data "azurerm_image" "custom" {
+#    name = "your_custom_image_name"
+#    resource_group_name = "your_group"
+#}
+#
+#resource "azurerm_virtual_machine" "main" {
+#    ...
+#
+#    storage_image_reference {
+#        id = "${data.azurerm_image.custom.id}"
+#    }
+#
+#    ...
+#}

@@ -128,8 +128,8 @@ resource "azurerm_lb_nat_rule" "example" {
   loadbalancer_id                = azurerm_lb.example.id
   name                           = "HTTPAccess"
   protocol                       = "Tcp"
-  frontend_port                  = ${var.application_port}
-  backend_port                   = ${var.application_port}
+  frontend_port                  = "${var.application_port}"
+  backend_port                   = "${var.application_port}"
   frontend_ip_configuration_name = azurerm_lb.example.frontend_ip_configuration[0].name
   
   tags = {

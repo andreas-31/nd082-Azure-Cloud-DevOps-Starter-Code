@@ -138,44 +138,37 @@ data "azurerm_image" "custom" {
 }
 
 resource "azurerm_virtual_machine" "main" {
-  count                           = local.instance_count
-  name                            = "${var.prefix}-vm${count.index}"
-  resource_group_name             = azurerm_resource_group.main.name
-  location                        = azurerm_resource_group.main.location
-  size                            = "Standard_B1s"
-  admin_username                  = "${var.admin_user}"
-  admin_password                  = "${var.admin_password}"
-  availability_set_id             = azurerm_availability_set.avset.id
-  disable_password_authentication = false
-  network_interface_ids = [
-    azurerm_network_interface.main[count.index].id,
-  ]
-  
-  storage_image_reference {
-    id="${data.azurerm_image.custom.id}"
-  }
-  
-  storage_os_disk {
-    name              = "osdisk"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-#  source_image_reference {
-#    publisher = "Canonical"
-#    offer     = "UbuntuServer"
-#    sku       = "18.04-LTS"
-#    version   = "latest"
-#  }
-
-#  os_disk {
-#    storage_account_type = "Standard_LRS"
-#    caching              = "ReadWrite"
-#  }
-  
-  tags = {
-    udacity = "Project Web Server"
-  }
+    count                 = local.instance_count
+    name                  = "${var.prefix}-vm${count.index}"
+    resource_group_name   = azurerm_resource_group.main.name
+    location              = azurerm_resource_group.main.location
+    network_interface_ids = [azurerm_network_interface.main[count.index].id,]
+    vm_size               = "Standard_B1s"
+    availability_set_id   = azurerm_availability_set.avset.id
+    storage_image_reference {
+        id = "${data.azurerm_image.custom.id}"
+    }
+    storage_os_disk {
+        name              = "udacity_osdisk"
+        caching           = "ReadWrite"
+        create_option     = "FromImage"
+        managed_disk_type = "Standard_LRS"
+    }
+    os_profile {
+        computer_name  = "udacity-vm"
+        admin_username = "${var.admin_user}"
+        admin_password = "${var.admin_password}"
+    }
+    os_profile_linux_config {
+        disable_password_authentication = false
+        ssh_keys {
+            path     = "/home/${var.admin_user}/.ssh/authorized_keys"
+            key_data = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuH0QGfW61qjFjiTJc4PPSfWyPFzy8QHj79Hu1U0oBtpmti5x2QodQ4iTvrs5BQqYiKhE6KaFyiVjAOthqrOJvhilKuOq2BtuIp01wkgmD9YV4EMoRLq+cUR6MdaLpkiT6O+huI+P4L5FShzxGSfHYiyJ4f6hZXlHqjqlJfcJCI47KPD7u4zSQmwycQm7Fz/AxiLQ4VZgMPO/54o8awo32MmORGRixPLNzAJ5OdfcGCvAgVkGX2WEk4qrHPqRbWSvPLC2HPfdxdUoi4wlWKVCYMEzGwCfgHl+8hyzaW2s7S+6rGBPtzmxnmPfYz1u8m2+5lC2vTPRb4oiWR062K4I7"
+        }
+    }
+    tags = {
+        udacity = "Project Web Server"
+    }
 }
 
 # Reference: https://stackoverflow.com/questions/55033018/terraform-azure-create-a-linux-vm-from-packer-image-and-external-data-disk

@@ -29,6 +29,8 @@
 	}],
 	"provisioners": [{
 		"inline": [
+			"apt-get update",
+                        "apt-get upgrade -y",
 			"echo 'Hello, World!' > index.html",
 			"nohup busybox httpd -f -p 80 &"
 		],

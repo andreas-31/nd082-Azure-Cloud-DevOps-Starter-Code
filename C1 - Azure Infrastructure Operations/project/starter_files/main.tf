@@ -150,13 +150,13 @@ resource "azurerm_virtual_machine" "main" {
         id = "${data.azurerm_image.custom.id}"
     }
     storage_os_disk {
-        name              = "udacity_osdisk"
+        name              = "${var.prefix}-osdisk${count.index}"
         caching           = "ReadWrite"
         create_option     = "FromImage"
         managed_disk_type = "Standard_LRS"
     }
     os_profile {
-        computer_name  = "udacity-vm"
+        computer_name  = "${var.prefix}-vm${count.index}"
         admin_username = "${var.admin_user}"
         admin_password = "${var.admin_password}"
     }

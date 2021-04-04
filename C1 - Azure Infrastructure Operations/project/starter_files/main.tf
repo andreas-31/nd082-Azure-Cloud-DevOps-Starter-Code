@@ -78,18 +78,18 @@ resource "azurerm_availability_set" "avset" {
 }
 
 resource "azurerm_network_security_group" "webserver" {
-  name                = "tls_webserver"
+  name                = "http_webserver"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   security_rule {
     access                     = "Allow"
     direction                  = "Inbound"
-    name                       = "tls"
+    name                       = "http"
     priority                   = 100
     protocol                   = "Tcp"
     source_port_range          = "*"
     source_address_prefix      = "*"
-    destination_port_range     = "443"
+    destination_port_range     = "${var.application_port}"
     destination_address_prefix = azurerm_subnet.internal.address_prefix
   }
   
@@ -126,10 +126,10 @@ resource "azurerm_lb_backend_address_pool" "example" {
 resource "azurerm_lb_nat_rule" "example" {
   resource_group_name            = azurerm_resource_group.main.name
   loadbalancer_id                = azurerm_lb.example.id
-  name                           = "HTTPSAccess"
+  name                           = "HTTPAccess"
   protocol                       = "Tcp"
-  frontend_port                  = 443
-  backend_port                   = 443
+  frontend_port                  = ${var.application_port}
+  backend_port                   = ${var.application_port}
   frontend_ip_configuration_name = azurerm_lb.example.frontend_ip_configuration[0].name
   
   tags = {
@@ -171,7 +171,7 @@ resource "azurerm_linux_virtual_machine" "main" {
     id = "${data.azurerm_image.custom.id}"
     #publisher = "Canonical"
     #offer     = "UbuntuServer"
-    #sku       = "16.04-LTS"
+    #sku       = "18.04-LTS"
     #version   = "latest"
   }
 

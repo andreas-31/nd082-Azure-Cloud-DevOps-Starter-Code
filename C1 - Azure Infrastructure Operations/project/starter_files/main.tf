@@ -130,10 +130,6 @@ resource "azurerm_network_interface_backend_address_pool_association" "example" 
   backend_address_pool_id = azurerm_lb_backend_address_pool.example.id
   ip_configuration_name   = "primary"
   network_interface_id    = element(azurerm_network_interface.main.*.id, count.index)
-  
-  tags = {
-    udacity = "Project Web Server"
-  }
 }
 
 data "azurerm_image" "custom" {
@@ -155,13 +151,15 @@ resource "azurerm_linux_virtual_machine" "main" {
     azurerm_network_interface.main[count.index].id,
   ]
 
-  source_image_reference {
+  storage_image_reference {
     id = "${data.azurerm_image.custom.id}"
-    #publisher = "Canonical"
-    #offer     = "UbuntuServer"
-    #sku       = "18.04-LTS"
-    #version   = "latest"
   }
+#  source_image_reference {
+#    publisher = "Canonical"
+#    offer     = "UbuntuServer"
+#    sku       = "18.04-LTS"
+#    version   = "latest"
+#  }
 
   os_disk {
     storage_account_type = "Standard_LRS"

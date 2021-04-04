@@ -29,10 +29,6 @@ resource "azurerm_subnet" "internal" {
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefixes     = ["10.0.2.0/24"]
-  
-  tags = {
-    udacity = "Project Web Server"
-  }
 }
 
 
@@ -117,10 +113,6 @@ resource "azurerm_lb_backend_address_pool" "example" {
   resource_group_name = azurerm_resource_group.main.name
   loadbalancer_id     = azurerm_lb.example.id
   name                = "BackEndAddressPool"
-  
-  tags = {
-    udacity = "Project Web Server"
-  }
 }
 
 resource "azurerm_lb_nat_rule" "example" {
@@ -131,10 +123,6 @@ resource "azurerm_lb_nat_rule" "example" {
   frontend_port                  = "${var.application_port}"
   backend_port                   = "${var.application_port}"
   frontend_ip_configuration_name = azurerm_lb.example.frontend_ip_configuration[0].name
-  
-  tags = {
-    udacity = "Project Web Server"
-  }
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "example" {

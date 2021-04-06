@@ -1,0 +1,30 @@
+[
+  {
+    "backendAddressPool": {
+      "id": "/subscriptions/6d68e332-cc12-4c5f-96d6-b6fb29db869d/resourceGroups/udacity-project1-resources/providers/Microsoft.Network/loadBalancers/udacity-project1-lb/backendAddressPools/BackEndAddressPool",
+      "resourceGroup": "udacity-project1-resources"
+    },
+    "backendPort": 80,
+    "disableOutboundSnat": null,
+    "enableFloatingIp": false,
+    "enableTcpReset": false,
+    "etag": "W/\"b0328ccc-4ce7-4217-9b41-b6217aa16505\"",
+    "frontendIpConfiguration": {
+      "id": "/subscriptions/6d68e332-cc12-4c5f-96d6-b6fb29db869d/resourceGroups/udacity-project1-resources/providers/Microsoft.Network/loadBalancers/udacity-project1-lb/frontendIPConfigurations/PublicIPAddress",
+      "resourceGroup": "udacity-project1-resources"
+    },
+    "frontendPort": 80,
+    "id": "/subscriptions/6d68e332-cc12-4c5f-96d6-b6fb29db869d/resourceGroups/udacity-project1-resources/providers/Microsoft.Network/loadBalancers/udacity-project1-lb/loadBalancingRules/udacity-project1-LBRule",
+    "idleTimeoutInMinutes": 4,
+    "loadDistribution": "Default",
+    "name": "udacity-project1-LBRule",
+    "probe": {
+      "id": "/subscriptions/6d68e332-cc12-4c5f-96d6-b6fb29db869d/resourceGroups/udacity-project1-resources/providers/Microsoft.Network/loadBalancers/udacity-project1-lb/probes/udacity-project1-http-running-probe",
+      "resourceGroup": "udacity-project1-resources"
+    },
+    "protocol": "Tcp",
+    "provisioningState": "Succeeded",
+    "resourceGroup": "udacity-project1-resources",
+    "type": "Microsoft.Network/loadBalancers/loadBalancingRules"
+  }
+]

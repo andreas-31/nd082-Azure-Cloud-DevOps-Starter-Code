@@ -119,7 +119,7 @@ resource "azurerm_lb_probe" "example" {
 resource "azurerm_lb_backend_address_pool" "example" {
   resource_group_name = azurerm_resource_group.main.name
   loadbalancer_id     = azurerm_lb.example.id
-  name                = "BackEndAddressPool"
+  name                = "${var.prefix}-BackEndAddressPool"
 }
 
 #resource "azurerm_lb_nat_rule" "example" {
@@ -140,6 +140,7 @@ resource "azurerm_lb_rule" "example" {
   frontend_port                  = 80
   backend_port                   = 80
   frontend_ip_configuration_name = azurerm_lb.example.frontend_ip_configuration[0].name
+  backend_address_pool_id        = azurerm_lb_backend_address_pool.example.id
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "example" {

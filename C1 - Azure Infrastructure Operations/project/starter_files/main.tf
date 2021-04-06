@@ -74,7 +74,7 @@ resource "azurerm_availability_set" "avset" {
 }
 
 resource "azurerm_network_security_group" "webserver" {
-  name                = "http_webserver"
+  name                = "${var.prefix}http_webserver-nsg"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   security_rule {
@@ -112,7 +112,7 @@ resource "azurerm_lb" "example" {
 resource "azurerm_lb_probe" "example" {
   resource_group_name = azurerm_resource_group.main.name
   loadbalancer_id     = azurerm_lb.example.id
-  name                = "http-running-probe"
+  name                = "${var.prefix}-http-running-probe"
   port                = 80
 }
 
@@ -122,13 +122,23 @@ resource "azurerm_lb_backend_address_pool" "example" {
   name                = "BackEndAddressPool"
 }
 
-resource "azurerm_lb_nat_rule" "example" {
+#resource "azurerm_lb_nat_rule" "example" {
+#  resource_group_name            = azurerm_resource_group.main.name
+#  loadbalancer_id                = azurerm_lb.example.id
+#  name                           = "HTTPAccess"
+#  protocol                       = "Tcp"
+#  frontend_port                  = "${var.application_port}"
+#  backend_port                   = "${var.application_port}"
+#  frontend_ip_configuration_name = azurerm_lb.example.frontend_ip_configuration[0].name
+#}
+
+resource "azurerm_lb_rule" "example" {
   resource_group_name            = azurerm_resource_group.main.name
   loadbalancer_id                = azurerm_lb.example.id
-  name                           = "HTTPAccess"
+  name                           = "${var.prefix}-LBRule"
   protocol                       = "Tcp"
-  frontend_port                  = "${var.application_port}"
-  backend_port                   = "${var.application_port}"
+  frontend_port                  = 80
+  backend_port                   = 80
   frontend_ip_configuration_name = azurerm_lb.example.frontend_ip_configuration[0].name
 }
 

@@ -37,6 +37,7 @@ resource "azurerm_public_ip" "pip" {
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   allocation_method   = "Static"
+  sku                 = "Standard"
   
   tags = {
     udacity = "Project Web Server"
@@ -100,7 +101,7 @@ resource "azurerm_lb" "example" {
   resource_group_name = azurerm_resource_group.main.name
 
   frontend_ip_configuration {
-    name                 = "PublicIPAddress"
+    name                 = "${var.prefix}-publicIPAddress"
     public_ip_address_id = azurerm_public_ip.pip.id
   }
   

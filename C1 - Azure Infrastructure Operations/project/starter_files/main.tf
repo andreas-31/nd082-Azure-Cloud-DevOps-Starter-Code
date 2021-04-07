@@ -143,6 +143,9 @@ resource "azurerm_lb_rule" "example" {
   backend_port                   = 80
   frontend_ip_configuration_name = azurerm_lb.example.frontend_ip_configuration[0].name
   backend_address_pool_id        = azurerm_lb_backend_address_pool.example.id
+  probe_id                       = azurerm_lb_probe.example.id
+  idle_timeout_in_minutes        = 15
+  enable_tcp_reset               = true
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "example" {

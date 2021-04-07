@@ -75,7 +75,8 @@ resource "azurerm_availability_set" "avset" {
 }
 
 resource "azurerm_network_security_group" "webserver" {
-  name                = "${var.prefix}-http_webserver-nsg"
+  count               = local.instance_count
+  name                = "${var.prefix}-webserverNSG-${count.index}"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   security_rule {
@@ -93,6 +94,14 @@ resource "azurerm_network_security_group" "webserver" {
   tags = {
     udacity = "Project Web Server"
   }
+}
+
+resource "azurerm_network_interface_security_group_association" "example" {
+  count                     = local.instance_count
+  #network_interface_id      = azurerm_network_interface.example.id
+  network_interface_id      = element(azurerm_network_interface.main.*.id, count.index)
+  #network_security_group_id = azurerm_network_security_group.example.id
+  network_security_group_id = element(azurerm_network_security_group.webserver.*.id, count.index)
 }
 
 resource "azurerm_lb" "example" {

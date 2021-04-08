@@ -3,6 +3,11 @@ variable "prefix" {
   default     = "udacity-project1"
 }
 
+variable "number_of_virtual_machines" {
+  description = "The number of virtual machines that will be instantiated and will be part of the availability set."
+  default     = 2
+}
+
 variable "location" {
   description = "The Azure Region in which all resources in this example should be created."
   default     = "East US"
@@ -28,7 +33,7 @@ variable "admin_user" {
   default     = "adminuser"
 }
 
-variable "admin_password" {
-  description = "Default password for adminuser"
-  default     = "P@ssw0rd1234!"
+variable "admin_ssh_public_key_file" {
+  description = "Path to SSH public key file holding the key data that will be added to virtual machine's authorized_keys file for the admin user to login via SSH."
+  default     = "~/.ssh/id_rsa.pub"
 }

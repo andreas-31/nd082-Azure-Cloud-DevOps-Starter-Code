@@ -73,15 +73,40 @@ resource "azurerm_network_security_group" "webserver" {
   name                = "${var.prefix}-webserverNSG-${count.index}"
   location            = data.azurerm_resource_group.main.location
   resource_group_name = data.azurerm_resource_group.main.name
-  security_rule {
+    security_rule {
+    description                = "Explicitly allow access between VMs within virtual network."
     access                     = "Allow"
     direction                  = "Inbound"
-    name                       = "http"
+    name                       = "allowAccessBetweenVMs"
     priority                   = 100
+    protocol                   = "*"
+    source_port_range          = "*"
+    source_address_prefix      = azurerm_subnet.internal.address_prefix
+    destination_port_range     = "*"
+    destination_address_prefix = azurerm_subnet.internal.address_prefix
+  }
+  security_rule {
+    description                = "Allow HTTP access from Internet clients to web servers in virtual network."
+    access                     = "Allow"
+    direction                  = "Inbound"
+    name                       = "allowHTTPaccess"
+    priority                   = 200
     protocol                   = "Tcp"
     source_port_range          = "*"
     source_address_prefix      = "*"
     destination_port_range     = "${var.application_port}"
+    destination_address_prefix = azurerm_subnet.internal.address_prefix
+  }
+  security_rule {
+    description                = "Explicitly deny all other access from Internet to hosts on the virtual network."
+    access                     = "Deny"
+    direction                  = "Inbound"
+    name                       = "denyOtherAccess"
+    priority                   = 300
+    protocol                   = "*"
+    source_port_range          = "*"
+    source_address_prefix      = "*"
+    destination_port_range     = "*"
     destination_address_prefix = azurerm_subnet.internal.address_prefix
   }
   

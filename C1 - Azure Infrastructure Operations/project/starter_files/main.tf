@@ -3,14 +3,8 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "main" {
-  #name     = "${var.resource_group_name}"
-  name     = "${var.prefix}-resources"
-  location = var.location
-}
-
-locals {
-  instance_count = 2
+data "azurerm_resource_group" "main" {
+  name = "${var.resource_group_name}"
 }
 
 resource "azurerm_virtual_network" "main" {
@@ -133,16 +127,6 @@ resource "azurerm_lb_backend_address_pool" "example" {
   name                = "${var.prefix}-BackEndAddressPool"
 }
 
-#resource "azurerm_lb_nat_rule" "example" {
-#  resource_group_name            = azurerm_resource_group.main.name
-#  loadbalancer_id                = azurerm_lb.example.id
-#  name                           = "HTTPAccess"
-#  protocol                       = "Tcp"
-#  frontend_port                  = "${var.application_port}"
-#  backend_port                   = "${var.application_port}"
-#  frontend_ip_configuration_name = azurerm_lb.example.frontend_ip_configuration[0].name
-#}
-
 resource "azurerm_lb_rule" "example" {
   resource_group_name            = azurerm_resource_group.main.name
   loadbalancer_id                = azurerm_lb.example.id
@@ -166,8 +150,7 @@ resource "azurerm_network_interface_backend_address_pool_association" "example" 
 
 data "azurerm_image" "custom" {
     name = "UdacityWebServerPackerImage"
-    #resource_group_name = azurerm_resource_group.main.name
-    resource_group_name = "${var.resource_group_name}"
+    resource_group_name = azurerm_resource_group.main.name
 }
 
 resource "azurerm_virtual_machine" "main" {
@@ -190,32 +173,15 @@ resource "azurerm_virtual_machine" "main" {
     os_profile {
         computer_name  = "${var.prefix}-vm${count.index}"
         admin_username = "${var.admin_user}"
-        admin_password = "${var.admin_password}"
     }
     os_profile_linux_config {
-        disable_password_authentication = false
+        disable_password_authentication = true
         ssh_keys {
             path     = "/home/${var.admin_user}/.ssh/authorized_keys"
-            key_data = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuH0QGfW61qjFjiTJc4PPSfWyPFzy8QHj79Hu1U0oBtpmti5x2QodQ4iTvrs5BQqYiKhE6KaFyiVjAOthqrOJvhilKuOq2BtuIp01wkgmD9YV4EMoRLq+cUR6MdaLpkiT6O+huI+P4L5FShzxGSfHYiyJ4f6hZXlHqjqlJfcJCI47KPD7u4zSQmwycQm7Fz/AxiLQ4VZgMPO/54o8awo32MmORGRixPLNzAJ5OdfcGCvAgVkGX2WEk4qrHPqRbWSvPLC2HPfdxdUoi4wlWKVCYMEzGwCfgHl+8hyzaW2s7S+6rGBPtzmxnmPfYz1u8m2+5lC2vTPRb4oiWR062K4I7"
+            key_data = file("${var.admin_ssh_public_key_file}")
         }
     }
     tags = {
         udacity = "Project Web Server"
     }
 }
-
-# Reference: https://stackoverflow.com/questions/55033018/terraform-azure-create-a-linux-vm-from-packer-image-and-external-data-disk
-#data "azurerm_image" "custom" {
-#    name = "your_custom_image_name"
-#    resource_group_name = "your_group"
-#}
-#
-#resource "azurerm_virtual_machine" "main" {
-#    ...
-#
-#    storage_image_reference {
-#        id = "${data.azurerm_image.custom.id}"
-#    }
-#
-#    ...
-#}

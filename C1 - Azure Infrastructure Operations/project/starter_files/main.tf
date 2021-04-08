@@ -10,8 +10,8 @@ data "azurerm_resource_group" "main" {
 resource "azurerm_virtual_network" "main" {
   name                = "${var.prefix}-network"
   address_space       = ["10.0.0.0/24"]
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
   
   tags = {
     udacity = "Project Web Server"
@@ -20,7 +20,7 @@ resource "azurerm_virtual_network" "main" {
 
 resource "azurerm_subnet" "internal" {
   name                 = "internal"
-  resource_group_name  = azurerm_resource_group.main.name
+  resource_group_name  = data.azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefixes     = ["10.0.0.0/24"]
 }
@@ -28,8 +28,8 @@ resource "azurerm_subnet" "internal" {
 
 resource "azurerm_public_ip" "pip" {
   name                = "${var.prefix}-pip"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
   allocation_method   = "Static"
   sku                 = "Standard"
   
@@ -41,8 +41,8 @@ resource "azurerm_public_ip" "pip" {
 resource "azurerm_network_interface" "main" {
   count               = var.number_of_virtual_machines
   name                = "${var.prefix}-nic${count.index}"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
 
   ip_configuration {
     name                          = "primary"
@@ -57,8 +57,8 @@ resource "azurerm_network_interface" "main" {
 
 resource "azurerm_availability_set" "avset" {
   name                         = "${var.prefix}-avset"
-  location                     = azurerm_resource_group.main.location
-  resource_group_name          = azurerm_resource_group.main.name
+  location                     = data.azurerm_resource_group.main.location
+  resource_group_name          = data.azurerm_resource_group.main.name
   platform_fault_domain_count  = 2
   platform_update_domain_count = 2
   managed                      = true
@@ -71,8 +71,8 @@ resource "azurerm_availability_set" "avset" {
 resource "azurerm_network_security_group" "webserver" {
   count               = var.number_of_virtual_machines
   name                = "${var.prefix}-webserverNSG-${count.index}"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
   security_rule {
     access                     = "Allow"
     direction                  = "Inbound"
@@ -100,8 +100,8 @@ resource "azurerm_network_interface_security_group_association" "example" {
 
 resource "azurerm_lb" "example" {
   name                = "${var.prefix}-lb"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
   sku                 = "Standard"
 
   frontend_ip_configuration {
@@ -115,20 +115,20 @@ resource "azurerm_lb" "example" {
 }
 
 resource "azurerm_lb_probe" "example" {
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = data.azurerm_resource_group.main.name
   loadbalancer_id     = azurerm_lb.example.id
   name                = "${var.prefix}-http-running-probe"
   port                = 80
 }
 
 resource "azurerm_lb_backend_address_pool" "example" {
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = data.azurerm_resource_group.main.name
   loadbalancer_id     = azurerm_lb.example.id
   name                = "${var.prefix}-BackEndAddressPool"
 }
 
 resource "azurerm_lb_rule" "example" {
-  resource_group_name            = azurerm_resource_group.main.name
+  resource_group_name            = data.azurerm_resource_group.main.name
   loadbalancer_id                = azurerm_lb.example.id
   name                           = "${var.prefix}-LBRule"
   protocol                       = "Tcp"
@@ -150,14 +150,14 @@ resource "azurerm_network_interface_backend_address_pool_association" "example" 
 
 data "azurerm_image" "custom" {
     name = "UdacityWebServerPackerImage"
-    resource_group_name = azurerm_resource_group.main.name
+    resource_group_name = data.azurerm_resource_group.main.name
 }
 
 resource "azurerm_virtual_machine" "main" {
     count                 = local.instance_count
     name                  = "${var.prefix}-vm${count.index}"
-    resource_group_name   = azurerm_resource_group.main.name
-    location              = azurerm_resource_group.main.location
+    resource_group_name   = data.azurerm_resource_group.main.name
+    location              = data.azurerm_resource_group.main.location
     network_interface_ids = [azurerm_network_interface.main[count.index].id,]
     vm_size               = "Standard_B1s"
     availability_set_id   = azurerm_availability_set.avset.id

@@ -46,6 +46,10 @@ In order to authenticate to your subscription replace the following values with 
 2. {CLIENT SECRET}
 3. {SUBSCRIPTION ID}
 
+Please check the following how-to in the Azure documentation to create a service principal and get the required ID values:
+
+[How to: Use the portal to create an Azure AD application and service principal that can access resources](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal)
+
 #### Step 3: Terraform Template
 Commands for provisioning the infrastructure in the Azure cloud with Terraform:
 ```:bash
@@ -86,5 +90,7 @@ terraform plan -out solution.plan -var='number_of_virtual_machines=3'
 3. Change default values directly in the file variables.tf
 
 ### Output
-**Your words here**
+The Terraform apply command outputs these values after successfully provisioning the resources:
+- public_IP_Load_Balancer: Public HTTP service IP address of the load balancer in front of the webservers.
+- network_Interface_Private_IP: Private IP addresses of the VM network interfaces, e.g. when 3 virtual machines are provisioned, 3 private IP addresses will be displayed.
 

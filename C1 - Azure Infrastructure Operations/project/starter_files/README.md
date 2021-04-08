@@ -47,6 +47,44 @@ In order to authenticate to your subscription replace the following values with 
 3. {SUBSCRIPTION ID}
 
 #### Step 3: Terraform Template
+Commands for provisioning the infrastructure in the Azure cloud with Terraform:
+```:bash
+# Initialize Terraform in the folder containing the file donloaded from this Git repository
+terraform init
+
+# Initial deployment and modifications to existing deployment
+terraform plan -out solution.plan
+terraform apply solution.plan
+
+# Removal of all resources provisioned in earlier steps
+terraform destroy
+```
+Default values have been set in the file variables.tf for the following variables:
+- prefix
+- number_of_virtual_machines
+- location
+- resource_group_name
+- packer_image_name
+- application_port
+- admin_user
+- admin_ssh_public_key_file
+
+Customization of deployment including number of virtual machines: each variable can be set to custom value by using of the following methods:
+1. Use a custom .tfvars file
+```:bash
+# Example for changing the number of to be provisioned virtual machines to 3
+# by using a customized .tfvars file.
+echo "number_of_virtual_machines = 3" > custom.tfvars
+terraform plan -out solution.plan -var-file custom.tfvars
+```
+2. Provide variable and value on the command line when executing the terraform apply command
+```:bash
+# Example for changing the number of to be provisioned virtual machines to 3
+# by supplying the customized value on the command line.
+terraform plan -out solution.plan -var='number_of_virtual_machines=3'
+```
+3. Change default values directly in the file variables.tf
+
 ### Output
 **Your words here**
 

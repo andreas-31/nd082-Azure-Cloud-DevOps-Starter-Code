@@ -39,7 +39,7 @@ resource "azurerm_public_ip" "pip" {
 }
 
 resource "azurerm_network_interface" "main" {
-  count               = local.instance_count
+  count               = var.number_of_virtual_machines
   name                = "${var.prefix}-nic${count.index}"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
@@ -69,7 +69,7 @@ resource "azurerm_availability_set" "avset" {
 }
 
 resource "azurerm_network_security_group" "webserver" {
-  count               = local.instance_count
+  count               = var.number_of_virtual_machines
   name                = "${var.prefix}-webserverNSG-${count.index}"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
@@ -91,7 +91,7 @@ resource "azurerm_network_security_group" "webserver" {
 }
 
 resource "azurerm_network_interface_security_group_association" "example" {
-  count                     = local.instance_count
+  count                     = var.number_of_virtual_machines
   #network_interface_id      = azurerm_network_interface.example.id
   network_interface_id      = element(azurerm_network_interface.main.*.id, count.index)
   #network_security_group_id = azurerm_network_security_group.example.id

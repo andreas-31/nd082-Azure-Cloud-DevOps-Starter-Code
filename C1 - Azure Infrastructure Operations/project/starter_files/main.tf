@@ -94,7 +94,7 @@ resource "azurerm_network_security_group" "webserver" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     source_address_prefix      = "*"
-    destination_port_range     = "${var.application_port}"
+    destination_port_range     = var.application_port
     destination_address_prefix = azurerm_subnet.internal.address_prefix
   }
   security_rule {

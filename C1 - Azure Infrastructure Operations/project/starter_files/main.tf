@@ -4,7 +4,7 @@ provider "azurerm" {
 }
 
 data "azurerm_resource_group" "main" {
-  name = "${var.resource_group_name}"
+  name = var.resource_group_name
 }
 
 resource "azurerm_virtual_network" "main" {
@@ -189,7 +189,7 @@ resource "azurerm_virtual_machine" "main" {
     # Uncomment this line to delete the OS disk automatically when deleting the VM
     delete_os_disk_on_termination = true
     storage_image_reference {
-        id = "${data.azurerm_image.custom.id}"
+        id = data.azurerm_image.custom.id
     }
     storage_os_disk {
         name              = "${var.prefix}-osdisk${count.index}"
@@ -199,13 +199,13 @@ resource "azurerm_virtual_machine" "main" {
     }
     os_profile {
         computer_name  = "${var.prefix}-vm${count.index}"
-        admin_username = "${var.admin_user}"
+        admin_username = var.admin_user
     }
     os_profile_linux_config {
         disable_password_authentication = true
         ssh_keys {
             path     = "/home/${var.admin_user}/.ssh/authorized_keys"
-            key_data = file("${var.admin_ssh_public_key_file}")
+            key_data = file(var.admin_ssh_public_key_file)
         }
     }
     tags = {

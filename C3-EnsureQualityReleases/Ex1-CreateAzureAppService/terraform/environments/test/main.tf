@@ -7,11 +7,11 @@ provider "azurerm" {
 }
 terraform {
   backend "azurerm" {
-    resource_group_name  = "${var.tf_backend_resource_group_name}"
-    storage_account_name = "${var.tf_storage_account_name}"
-    container_name       = "${var.tf_container_name}"
-    key                  = "${var.tf_state_store_file_name}"
-    access_key           = "${var.tf_access_key}"
+    resource_group_name  = "{$var.tf_backend_resource_group_name}"
+    storage_account_name = "{$var.tf_storage_account_name}"
+    container_name       = "{$var.tf_container_name}"
+    key                  = "{$var.tf_state_store_file_name}"
+    access_key           = "{$var.tf_access_key}"
   }
 }
 locals {

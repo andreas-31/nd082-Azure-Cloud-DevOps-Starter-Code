@@ -1,0 +1,21 @@
+Exercise Solution
+
+You may download the solution file at the bottom of this page. The steps below will walk you through the solution to the exercise.
+
+    I opened Postman then I created a Lesson4 collection. Next I went to Add Request.
+    I added a Get All Users request
+        I made sure it was a GET request
+        Pasted in the link
+        Set a parameter of page with a value of 1
+    I added a Create User request
+        I made sure it was a POST request
+        Pasted in the link
+        Went to the Body tab, then selected “raw”
+        Pasted in the JSON, and filled in the fields
+        After I received the response I copied the _id
+    I added a Get by UserId request
+        I made sure it was a GET request
+        Pasted in the link, and added the _id from the create
+        Sent the request, and my user was returned.
+
+

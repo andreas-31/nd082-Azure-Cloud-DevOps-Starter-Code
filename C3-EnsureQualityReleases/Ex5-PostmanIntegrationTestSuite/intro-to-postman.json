@@ -1,0 +1,92 @@
+{
+	"info": {
+		"_postman_id": "9373955b-996c-44b2-ac95-8220ec0b41be",
+		"name": "Lesson4",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonmonk.com/api/v1/users?page=1",
+					"protocol": "https",
+					"host": [
+						"jsonmonk",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Get All users on page 1"
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n    \"first_name\": \"Test\",\r\n    \"last_name\": \"User\",\r\n    \"email\": \"fake@example.com\",\r\n    \"mobile_no\": \"8675309\",\r\n    \"password\": \"password1\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonmonk.com/api/v1/users",
+					"protocol": "https",
+					"host": [
+						"jsonmonk",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				},
+				"description": "Create a user"
+			},
+			"response": []
+		},
+		{
+			"name": "Get by UserId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonmonk.com/api/v1/users/5e9cba70d4c4734c3e4fdc49",
+					"protocol": "https",
+					"host": [
+						"jsonmonk",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"5e9cba70d4c4734c3e4fdc49"
+					]
+				},
+				"description": "Gets a User by Id"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
